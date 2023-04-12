@@ -17,6 +17,11 @@ dvc pull
 flask --app main run
 ```
 
+## Start flask app (docker option)
+```shell
+docker compose up
+```
+
 ## Training and creating a model
 
 - Run the training file
