@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Input Form</title>
+    <style>
+		form {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			margin-top: 50px;
+		}
+
+		label {
+			margin-top: 20px;
+			font-weight: bold;
+		}
+
+		input[type="file"],
+		input[type="text"] {
+			padding: 10px;
+			border: none;
+			box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+			border-radius: 5px;
+			width: 100%;
+			max-width: 400px;
+			margin-top: 10px;
+			font-size: 16px;
+		}
+
+		input[type="file"] {
+			cursor: pointer;
+		}
+
+		#image-preview {
+			width: 100%;
+			max-width: 400px;
+			height: 400px;
+			margin-top: 20px;
+			background-size: contain;
+			background-repeat: no-repeat;
+			background-position: center;
+			box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+			border-radius: 5px;
+		}
+
+
+
+
+
+
+    </style>
+</head>
+<body>
+
+
+<form method="post" enctype="multipart/form-data">
+    {% if result %}
+    {% for animal in result %}
+    <h3>{{animal}}</h3>
+    {% endfor %}
+    {% endif %}
+    <label for="image-file">Select an image file:</label>
+    <input type="file" id="image-file" name="image-file" accept="image/*">
+
+    <label for="image-url">Or enter an image URL:</label>
+    <input type="text" id="image-url" name="image-url" value="{% if image_url %} {{image_url}} {% endif %}">
+
+    <button type="submit" class="submit-button">Submit</button>
+
+    <div id="image-preview"></div>
+</form>
+
+<script>
+		const fileInput = document.getElementById('image-file');
+		const urlInput = document.getElementById('image-url');
+		const previewDiv = document.getElementById('image-preview');
+
+		fileInput.addEventListener('change', () => {
+
+		if (fileInput.files.length > 0) {
+          urlInput.disabled = true;
+        } else {
+          urlInput.disabled = false;
+        }
+			const file = fileInput.files[0];
+			const reader = new FileReader();
+			reader.readAsDataURL(file);
+			reader.onloadend = () => {
+				previewDiv.style.backgroundImage = `url(${reader.result})`;
+			};
+		});
+
+		urlInput.addEventListener('input', () => {
+		if (urlInput.value.trim() !== '') {
+          fileInput.disabled = true;
+        } else {
+          fileInput.disabled = false;
+        }
+			previewDiv.style.backgroundImage = `url(${urlInput.value})`;
+		});
+
+
+
+
+</script>
+</body>
+</html>
